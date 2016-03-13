@@ -20,7 +20,7 @@ class ValueTracker {
      * Constructor function.
      *
      */
-    public function __construct(int $value, string $title = '', string   $description = '', string $moreInfoURL) {
+    public function __construct(int $value, string $title = NULL, string $description = NULL, string $moreInfoURL = NULL) {
         $this->value = $value;
         $this->title = $title;
         $this->descriptoin = $description;
