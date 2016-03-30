@@ -7,7 +7,9 @@
 namespace ba66e77\numerish;
 
 /**
+ * Class ValueTracker
  *
+ * @package ba66e77\numerish
  */
 class ValueTracker {
 
@@ -16,24 +18,36 @@ class ValueTracker {
     protected $description;
     protected $moreInfoURL;
 
-    /**
-     * Constructor function.
-     *
-     */
+  /**
+   * ValueTracker constructor.
+   *
+   * @param      $value
+   * @param null $title
+   * @param null $description
+   * @param null $moreInfoURL
+   */
     public function __construct($value, $title = null, $description = null, $moreInfoURL = null) {
-        $this->value = $value;
-        $this->title = $title;
-        $this->description = $description;
-        $this->moreInfoURL = $moreInfoURL;
+        foreach (array('value', 'title', 'description', 'moreInfoURL') as $var) {
+            if (!is_null($$var)) {
+                $this->validateParameter($var, $$var);
+                $this->$var = $$var;
+            }
+        }
     }
 
+  /**
+   * @param $name
+   * @param $value
+   *
+   * @throws \Exception
+   */
     public function __set($name, $value) {
         try {
             $this->validateParameter($name, $value);
             $this->$name = $value;
         }
-        catch (Exception $e) {
-            throw new Exception("Unable to set $name");
+        catch (\Exception $e) {
+            throw new \Exception("Unable to set $name");
         }
     }
 
@@ -45,10 +59,12 @@ class ValueTracker {
      *
      * @return true
      */
-    protected function validateParameter($attributeName, $value) {
+    public function validateParameter($attributeName, $value) {
         switch ($attributeName) {
             case 'value':
-                throw new \Exception("No validator for $attributeName");
+                if (!is_numeric($value)) {
+                    throw new \UnexpectedValueException("Value supplied must be numeric.");
+                }
                 break;
             case 'title':
                 throw new \Exception("No validator for $attributeName");
